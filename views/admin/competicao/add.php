@@ -162,7 +162,7 @@
 <h1>Competição Adicionar</h1>
 
 <!-- insert logic here -->
-<?php require_once(JAP_PATH . 'views/admin/competicao/insert_function.php');?>
+<?php require_once(JAP_PATH . 'views/admin/competicao/insert.php');?>
 <div class="container__wrapper">
     <form action="" method="POST" id="jap__form">
         <input type="hidden" name="jap_visitantes_nonce"

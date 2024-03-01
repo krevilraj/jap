@@ -174,7 +174,7 @@ $competicao = $data['competicao'];
 
 
 <!-- insert logic here -->
-<?php require_once(JAP_PATH . 'views/admin/competicao/update_function.php'); ?>
+<?php require_once(JAP_PATH . 'views/admin/competicao/update.php'); ?>
 <div class="container__wrapper">
     <form action="" method="POST" id="jap__form">
         <input type="hidden" name="jap_visitantes_nonce"

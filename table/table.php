@@ -82,7 +82,7 @@ if (empty($mvt_db_version)) {
     CREATE TABLE $table_name (
         id bigint(11) NOT NULL AUTO_INCREMENT,
         equipas_id bigint(11) NOT NULL,
-        name varchar(255) NOT NULL,
+        nome varchar(255) NOT NULL,
         user_id bigint(11) NOT NULL,
         PRIMARY KEY (id),
         FOREIGN KEY (equipas_id) REFERENCES $equipas_table_name(id) ON DELETE CASCADE

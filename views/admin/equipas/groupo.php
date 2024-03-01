@@ -84,8 +84,9 @@ wp_enqueue_style('jap_datatables_css');
 <div id="equipas-container">
 
     <div class="col-left">
+        <?php require_once(JAP_PATH . 'views/admin/equipas/insert.php');?>
 
-        <form id="new-category-form">
+        <form id="new-category-form" method="POST">
             <!-- Input for category name -->
             <label for="name">Equipes Nome:</label>
             <input type="text" id="name" class="form-input" name="name" required>
