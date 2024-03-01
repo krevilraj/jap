@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        pre($_POST);
+//        pre($_POST);
 
         $competicao_id = sanitize_text_field(test_input($_POST['competicao_id']));
         if(!isset($competicao_id)){
@@ -48,32 +48,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $momento_id_arr = $_POST['momento_id'];
                     $total_momento = count($momento_arr);
                     for ($parent_index = 0; $parent_index < $total_momento; $parent_index++) {
-//                        $temp_moment_title = $momento_arr[$parent_index][0];
-//                        $temp_moment_id = $momento_id_arr[$parent_index][0];
-//                        $table_name_momento = TABLE_MOMENTO;
-//                        $arr_input = [
-//                            'title' => $temp_moment_title,
-//                        ];
-//                        $updated = $wpdb->update("$table_name_momento", $arr_input, ["id" => $temp_moment_id]);
+                        $temp_moment_title = $momento_arr[$parent_index][0];
+
+                        $table_name_momento = TABLE_MOMENTO;
+                        if(isset($momento_id_arr[$parent_index][0])){
+                            $temp_moment_id = $momento_id_arr[$parent_index][0];
+                            $arr_input = [
+                                'title' => $temp_moment_title,
+                            ];
+                            $updated = $wpdb->update("$table_name_momento", $arr_input, ["id" => $temp_moment_id]);
+                        }else{
+                            $table_name = TABLE_MOMENTO;
+                            $wpdb->insert("$table_name", [
+                                'competicao_id' => $competicao_id,
+                                'title' => $temp_moment_title,
+                                'user_id' => $user_id
+                            ]);
+                            $temp_moment_id = $wpdb->insert_id;
+                        }
+
 
                         $observacao_arr = $_POST['observacao'][$parent_index];
                         $peso_da_nota_arr = $_POST['peso_da_nota'][$parent_index];
-                        $o_que_avaliamos = $_POST['o_que_avaliamos'][$parent_index];
+                        $o_que_avaliamos_arr = $_POST['o_que_avaliamos'][$parent_index];
+
                         foreach ($observacao_arr as $index => $value) {
 
-                            $arr_input = [
-                                'nome' => $nome,
-                                'image' => $image,
-                                'status' => $status,
-                                'user_id' => $user_id
-                            ];
-                            $updated = $wpdb->update("$table_name", $arr_input, ["id" => $competicao_id]);
+                            if(!isset($_POST['observacao_id'][$parent_index])){
+                                $table_name = TABLE_MOMENTO_META;
+                                $arr_input = [
+                                    'moments_id' => $temp_moment_id,
+                                    'title' => $observacao_arr[$index],
+                                    'peso_da_nota' => $peso_da_nota_arr[$index],
+                                    'o_que_avaliamos' => $o_que_avaliamos_arr[$index],
+                                    'user_id' => $user_id,
+                                ];
+                                $wpdb->insert("$table_name", $arr_input);
+                            }else{
+                                $observacao_id_arr = $_POST['observacao_id'][$parent_index];
+                                if(isset($observacao_id_arr[$index])){
+                                    $table_name = TABLE_MOMENTO_META;
+                                    $arr_input = [
+                                        'title' => $observacao_arr[$index],
+                                        'peso_da_nota' => $peso_da_nota_arr[$index],
+                                        'o_que_avaliamos' => $o_que_avaliamos_arr[$index]
+                                    ];
+                                    $updated = $wpdb->update("$table_name", $arr_input, ["id" => $observacao_id_arr[$index]]);
 
-                            echo $momento_arr[$parent_index][0];
-                            echo "--".$value.'<br>';
+                                }else{
+                                    $arr_input = [
+                                        'moments_id' => $temp_moment_id,
+                                        'title' => $observacao_arr[$index],
+                                        'peso_da_nota' => $peso_da_nota_arr[$index],
+                                        'o_que_avaliamos' => $o_que_avaliamos_arr[$index],
+                                        'user_id' => $user_id,
+                                    ];
+                                    $wpdb->insert("$table_name", $arr_input);
+
+
+                                }
+                            }
+
+
+//                            pre($arr_input);
+//                            echo '</br>';
 
                         }
-                        echo '<br><br><br>';
+//                        echo '<br><br><br>';
 
                     }
                 }

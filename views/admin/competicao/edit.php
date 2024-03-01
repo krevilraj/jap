@@ -220,7 +220,7 @@ $competicao = $data['competicao'];
 
                     ?>
                     <div class="container momento__wrapper">
-                        <div class="close__btn"><img src="<?php echo JAP_URL; ?>assets/image/cancel.png" alt=""></div>
+                        <div class="close__btn" data-moments_id="<?php echo $moment_item->id ?? ''; ?>"><img src="<?php echo JAP_URL; ?>assets/image/cancel.png" alt=""></div>
                         <div class="bullet__number"><?php echo $index + 1; ?></div>
                         <div class="momento__item_wrapper">
                             <input type="text" name="<?php echo "momento_name[$index][]"; ?>"
@@ -235,7 +235,7 @@ $competicao = $data['competicao'];
 
 
                                 <div class="momento_area">
-                                    <div class="close__btn"><img src="<?php echo JAP_URL; ?>assets/image/cancel.png"
+                                    <div class="close__btn" data-observacao_id="<?php echo $observation_item->id ?? ''; ?>"><img src="<?php echo JAP_URL; ?>assets/image/cancel.png"
                                                                  alt="">
                                     </div>
                                     <input type="hidden" name="<?php echo "observacao_id[$index][]"; ?>"
@@ -275,11 +275,12 @@ $competicao = $data['competicao'];
     jQuery(document).ready(function ($) {
         // Initialize the index
         var index = 0;
+        var formSubmitted = false;
         // Add more fields for a particular moment
         $(document).on("click", ".add_momento", function () {
             var lastMomentoItemWrapper = $(this).siblings(".momento__item_wrapper");
             var clonedMomentoArea = lastMomentoItemWrapper.find(".momento_area:last-child").clone();
-
+            clonedMomentoArea.find(".close__btn").removeAttr("data-observacao_id");
             // Remove hidden input fields from the cloned element
             clonedMomentoArea.find("input[type='hidden']").remove();
 
@@ -297,6 +298,10 @@ $competicao = $data['competicao'];
             // Remove hidden input fields from the cloned element
             clonedMomentoWrapper.find("input[type='hidden']").remove();
 
+            // Remove data attribute for observation id
+            clonedMomentoWrapper.find(".close__btn").removeAttr("data-moments_id");
+            clonedMomentoWrapper.find(".close__btn").removeAttr("data-observacao_id");
+
             // Parse bullet__num to int, increment, and update HTML
             var bullet__num = parseInt(containerWrapper.find(".bullet__number:last").html());
             clonedMomentoWrapper.find(".bullet__number").html(bullet__num + 1);
@@ -311,10 +316,53 @@ $competicao = $data['competicao'];
 
         // Remove momento__wrapper on close button click
         $(document).on("click", ".momento__wrapper > .close__btn", function () {
+            var moment_id = $(this).data("moments_id");
+            if(moment_id){
+                $.ajax({
+                    url: ajaxurl, // WordPress AJAX endpoint
+                    type: "POST",
+                    data: {
+                        action: "delete_momento_row", // Custom action name
+                        moment_id: moment_id,
+                    },
+                    success: function (response) {
+                        // Handle the success response (if needed)
+                        console.log("Row deleted successfully");
+                    },
+                    error: function (error) {
+                        // Handle the error response (if needed)
+                        console.error("Error deleting row:", error);
+                    },
+                });
+            }
+
             $(this).closest(".momento__wrapper").remove();
         });
 
         $(document).on("click", ".momento_area > .close__btn", function () {
+            var observation_id = $(this).data("observacao_id");
+
+            if (observation_id) {
+                // Make an AJAX call to delete the row
+                $.ajax({
+                    url: ajaxurl, // WordPress AJAX endpoint
+                    type: "POST",
+                    data: {
+                        action: "delete_momento_meta_row", // Custom action name
+                        observation_id: observation_id,
+                    },
+                    success: function (response) {
+                        // Handle the success response (if needed)
+                        console.log("Row deleted successfully");
+                        formSubmitted = true;
+                    },
+                    error: function (error) {
+                        // Handle the error response (if needed)
+                        console.error("Error deleting row:", error);
+                    },
+                });
+            }
+
             $(this).closest(".momento_area").remove();
         });
 
@@ -343,7 +391,7 @@ $competicao = $data['competicao'];
 
             if (isValidationError) {
                 event.preventDefault(); // Prevent form submission
-                alert('failed');
+
             }
         });
     });

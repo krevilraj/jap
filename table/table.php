@@ -65,8 +65,8 @@ if (empty($mvt_db_version)) {
     $query_equipas = "
     CREATE TABLE $table_name_equipas (
         id bigint(11) NOT NULL AUTO_INCREMENT,
-        competicao_id bigint(11) NOT NULL,
-        componentes_de_avaliacao varchar(255) NOT NULL,
+        nome varchar(255) NOT NULL,
+        competicao_id bigint(11),
         user_id bigint(11) NOT NULL,
         PRIMARY KEY (id),
         FOREIGN KEY (competicao_id) REFERENCES $competicao_table_name(id) ON DELETE CASCADE
