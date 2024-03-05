@@ -4,8 +4,8 @@ $error = [];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_POST['submit'])) {
-        if (isset($_POST['jap_vistantes_nonce'])) {
-            if (!wp_verify_nonce($_POST['jap_vistantes_nonce'], 'jap_vistantes_nonce')) {
+        if (isset($_POST['jap_competicao_nonce'])) {
+            if (!wp_verify_nonce($_POST['jap_competicao_nonce'], 'jap_competicao_nonce')) {
                 return;
             }
         }

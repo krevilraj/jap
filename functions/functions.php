@@ -1,44 +1,13 @@
 <?php
-
-/**
- * Get JAP Chart View
- */
-function jap_equipas_callback(){
-    view('admin.equipas.list');
-}
-
-/**
- * Get JAP Chart View
- */
-function jap_equipas_add_callback(){
-    global $wpdb;
-    $competicao_list = $wpdb->get_results($wpdb->prepare("select * FROM $table_name ORDER BY id DESC", ""), ARRAY_A);
-
-    view('admin.equipas.add',$competicao_list);
-}
-
-/**
- * Get JAP Groupo View
- */
-function jap_groupo_callback(){
-    view('admin.equipas.groupo');
-}
+require_once(JAP_PATH . 'functions/function.competicao.php');
+require_once(JAP_PATH . 'functions/function.equipas.php');
+require_once(JAP_PATH . 'functions/function.juris.php');
 
 
 
-/**
- * Get JAP Chart View
- */
-function jap_juris_callback(){
-    view('admin.juris.list');
-}
 
-/**
- * Get JAP Chart View
- */
-function jap_juris_add_callback(){
-    view('admin.juris.add');
-}
+
+
 
 
 /**

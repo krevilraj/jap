@@ -75,6 +75,18 @@ if (!class_exists('Jap_Route')) {
             'manage_options',
             'add-equipas',
             'jap_equipas_add_callback');
+        add_submenu_page(null,
+            'Excluir equipas',
+            'Excluir equipas',
+            'manage_options',
+            'delete-equipas',
+            'jap_delete_equipa');
+        add_submenu_page(null,
+            'Editar equipa',
+            'Editar equipa',
+            'manage_options',
+            'edit-equipa',
+            'jap_edit_equipa_groupo');
 
 
 
@@ -102,6 +114,18 @@ if (!class_exists('Jap_Route')) {
             'add-juris',
             'jap_juris_add_callback');
 
+        add_submenu_page(null,
+            'Excluir juris',
+            'Excluir juris',
+            'manage_options',
+            'delete-juris',
+            'jap_delete_juris');
+        add_submenu_page(null,
+            'Editar juris',
+            'Editar juris',
+            'manage_options',
+            'edit-juris',
+            'jap_edit_juris');
 
 
         add_menu_page(

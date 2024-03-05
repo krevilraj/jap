@@ -25,7 +25,7 @@ if (!class_exists('Jap')) {
 
             // Controller for Admin
             require_once(JAP_PATH . 'functions/functions.php');
-            require_once(JAP_PATH . 'functions/function.competicao.php');
+
 
             require_once( JAP_PATH . "route/class.jap.route.php" );
             $KIA_REQUEST_Route = new Jap_Route();

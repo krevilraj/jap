@@ -75,6 +75,10 @@
     .remove-group i {
         font-size: 11px;
     }
+    .groupo_input .index{
+        visibility: hidden;
+        position: absolute;
+    }
 </style>
 <?php
 wp_enqueue_script('jap_datatables_js');
@@ -84,20 +88,32 @@ wp_enqueue_style('jap_datatables_css');
 <div id="equipas-container">
 
     <div class="col-left">
-        <?php require_once(JAP_PATH . 'views/admin/equipas/insert.php'); ?>
+        <?php require_once(JAP_PATH . 'views/admin/equipas/update_groupo_equipa.php'); ?>
         <?php require_once(JAP_PATH . 'views/template/message_box.php'); ?>
         <form id="new-category-form" method="POST">
-            <input type="hidden" name="jap_equipas_nonce"
-                   value="<?php echo wp_create_nonce('jap_equipas_nonce'); ?>">
+            <input type="hidden" name="jap_groupo_nonce"
+                   value="<?php echo wp_create_nonce('jap_groupo_nonce'); ?>">
             <!-- Input for category name -->
             <label for="name">Equipes Nome:</label>
-            <input type="text" id="name" class="form-input" name="nome" required>
+            <input type="hidden" name="id" value="<?php echo $equipa->id ?? ''; ?>">
+            <input type="text" id="name" class="form-input" name="nome" value="<?php echo $equipa->nome ?? ''; ?>"
+                   required>
             <div class="groupos_wrapper">
-                <div class="groupo_input">
-                    <input name="groupo[]" type="text" placeholder="Nome do grupo" required>
-                    <button type="button" class="button button-danger remove-group"><i class="fas fa-minus"></i>
-                    </button>
-                </div>
+                <?php
+                if (isset($data['groupo'])) {
+                    $groupo = $data['groupo'];
+                    foreach ($groupo as $index => $group) {
+                        ?>
+                        <div class="groupo_input">
+                            <div class="index"><?php echo $index;?></div>
+                            <input type="hidden" name="groupo_id[<?php echo $index;?>][]" value="<?php echo $group->id ?? ''; ?>">
+                            <input name="groupo[<?php echo $index;?>][]" type="text" placeholder="Nome do grupo"
+                                   value="<?php echo $group->nome ?? ''; ?>" required>
+                            <button type="button" data-groupo_id="<?php echo $group->id ?? ''; ?>" class="button button-danger remove-group"><i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    <?php }
+                } ?>
             </div>
             <button type="button" class="button button-primary mt-15" id="add_group"><i class="fas fa-plus"></i>
                 Adicionar grupo
@@ -110,45 +126,6 @@ wp_enqueue_style('jap_datatables_css');
 
         </form>
     </div>
-    <div class="col-right">
-        <table id="example" class="display" style="width:100%">
-            <thead>
-            <tr style="text-align: left">
-                <th>Equipes Nome</th>
-                <th>Groupo</th>
-                <th>User</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            if (isset($equipas_list)) {
-                foreach ($equipas_list as $item) {
-                    ?>
-                    <tr>
-                        <td><?php echo $item->nome; ?>
-                            <div><span><a href="admin.php?page=edit-equipa&equipa_id=<?php echo $item->id;?>">Edit</a> | <a onclick="return confirm( 'Tem certeza de que deseja excluir a equipe' )" href="admin.php?page=delete-equipas&id=<?php echo $item->id;?>"> Delete</a></span></div>
-                        </td>
-                        <td>
-                            <?php $groupo_list = get_groupo($item->id)?>
-                            <?php $comma ="";foreach($groupo_list as $group){
-                                echo $comma.'<span>'.$group->nome.'</span>';
-                                $comma =", ";
-                            }?>
-
-                        </td>
-                        <td><?php echo my_get_users_name($item->user_id); ?></td>
-
-                    </tr>
-                    <?php
-                }
-            }
-            ?>
-
-
-            </tbody>
-        </table>
-    </div>
 
 
 </div>
@@ -157,13 +134,42 @@ wp_enqueue_style('jap_datatables_css');
     jQuery(document).ready(function ($) {
         // Add group
         $('#add_group').on('click', function () {
-            var newGroupInput = $('.groupo_input:first').clone();
+            var index;
+            var newGroupInput = $('.groupo_input:last-child').clone();
             newGroupInput.find('input').val(''); // Clear input value
+            index = parseInt(newGroupInput.find('.index').html());
+            index++;
+            newGroupInput.find('.index').html(index);
             $('.groupos_wrapper').append(newGroupInput);
+            newGroupInput.find("input[type='hidden']").remove();
+            newGroupInput.find("input[name^='groupo']").attr('name', 'groupo[' + index + '][]').val('');
+
         });
 
         // Remove group
         $('.groupos_wrapper').on('click', '.remove-group', function () {
+            var groupo_id = $(this).data("groupo_id");
+
+            if (groupo_id) {
+                // Make an AJAX call to delete the row
+                $.ajax({
+                    url: ajaxurl, // WordPress AJAX endpoint
+                    type: "POST",
+                    data: {
+                        action: "delete_groupo_row", // Custom action name
+                        groupo_id: groupo_id,
+                    },
+                    success: function (response) {
+                        // Handle the success response (if needed)
+                        console.log("Row deleted successfully");
+                        formSubmitted = true;
+                    },
+                    error: function (error) {
+                        // Handle the error response (if needed)
+                        console.error("Error deleting row:", error);
+                    },
+                });
+            }
             $(this).closest('.groupo_input').remove();
         });
         new DataTable('#example', {

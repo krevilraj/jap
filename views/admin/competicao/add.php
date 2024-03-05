@@ -165,15 +165,13 @@
 <?php require_once(JAP_PATH . 'views/admin/competicao/insert.php');?>
 <div class="container__wrapper">
     <form action="" method="POST" id="jap__form">
-        <input type="hidden" name="jap_visitantes_nonce"
-               value="<?php echo wp_create_nonce('jap_visitantes_nonce'); ?>">
+        <input type="hidden" name="jap_competicao_nonce"
+               value="<?php echo wp_create_nonce('jap_competicao_nonce'); ?>">
         <div class="container status__box">
             <div class="col-7">
                 <input type="text" placeholder="NOME DA COMPETIÇÃO" name="nome" required/>
                 <input type="file" id="image-upload"/>
 
-                <input type="text" name="criar_components_de_avaliacao" placeholder="CRIAR COMPONETES DE AVALIAÇÃO"
-                       required/>
 
             </div>
             <div class="col-2">

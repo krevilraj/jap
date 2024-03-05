@@ -117,21 +117,26 @@ if (empty($mvt_db_version)) {
     $momento_table_name = TABLE_MOMENTO; // Replace with the actual table name
     $equipas_table_name = TABLE_EQUIPAS; // Replace with the actual table name
 
+// Define the collation
+    $charset_collate = $wpdb->get_charset_collate();
+
     $query = "
-    CREATE TABLE $table_name (
-        id bigint(11) NOT NULL AUTO_INCREMENT,
-        user_id bigint(11) NOT NULL,
-        momento_id bigint(11) NOT NULL,
-        equipa_id bigint(11) NOT NULL,
-        rank int NOT NULL,
-        user_id bigint(11) NOT NULL,
-        PRIMARY KEY (id),
-        FOREIGN KEY (user_id) REFERENCES $users_table_name(id) ON DELETE CASCADE,
-        FOREIGN KEY (momento_id) REFERENCES $momento_table_name(id) ON DELETE CASCADE,
-        FOREIGN KEY (equipa_id) REFERENCES $equipas_table_name(id) ON DELETE CASCADE
-    )$charset_collate;";
+CREATE TABLE $table_name (
+    id bigint(11) NOT NULL AUTO_INCREMENT,
+    momento_id bigint(11) NOT NULL,
+    equipa_id bigint(11) NOT NULL,
+    equipa_rank int NOT NULL,
+    user_id bigint(11) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (momento_id) REFERENCES $momento_table_name(id) ON DELETE CASCADE,
+    FOREIGN KEY (equipa_id) REFERENCES $equipas_table_name(id) ON DELETE CASCADE
+) $charset_collate;";
 
     dbDelta($query);
+    if ($wpdb->last_error !== '') {
+        die('MySQL Error: ' . $wpdb->last_error);
+    }
+
 
     /***************** juris_momento *********************/
     global $wpdb;
@@ -146,13 +151,11 @@ if (empty($mvt_db_version)) {
     $query = "
     CREATE TABLE $table_name (
         id bigint(11) NOT NULL AUTO_INCREMENT,
-        user_id bigint(11) NOT NULL,
         momento_id bigint(11) NOT NULL,
         groupo_id bigint(11) NOT NULL,
         equipa_id bigint(11) NOT NULL,
         user_id bigint(11) NOT NULL,
         PRIMARY KEY (id),
-        FOREIGN KEY (user_id) REFERENCES $users_table_name(id) ON DELETE CASCADE,
         FOREIGN KEY (momento_id) REFERENCES $momento_table_name(id) ON DELETE CASCADE,
         FOREIGN KEY (groupo_id) REFERENCES $group_table_name(id) ON DELETE CASCADE,
         FOREIGN KEY (equipa_id) REFERENCES $equipas_table_name(id) ON DELETE CASCADE

@@ -177,8 +177,8 @@ $competicao = $data['competicao'];
 <?php require_once(JAP_PATH . 'views/admin/competicao/update.php'); ?>
 <div class="container__wrapper">
     <form action="" method="POST" id="jap__form">
-        <input type="hidden" name="jap_visitantes_nonce"
-               value="<?php echo wp_create_nonce('jap_visitantes_nonce'); ?>">
+        <input type="hidden" name="jap_competicao_nonce"
+               value="<?php echo wp_create_nonce('jap_competicao_nonce'); ?>">
         <input type="hidden" name="competicao_id" value="<?php echo $competicao->id; ?>">
         <div class="container status__box">
             <div class="col-7">
