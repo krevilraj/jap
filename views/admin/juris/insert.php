@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-//         pre($_POST);
+
         $nome = sanitize_text_field(test_input($_POST['nome']));
         $password = sanitize_text_field(test_input($_POST['password']));
         $email = sanitize_text_field(test_input($_POST['email']));
@@ -41,10 +41,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if(isset($groupo[$moment_index])){
                             $equipa_id = $_POST['equipa_id'];
                             foreach ($groupo[$moment_index] as $groupo_index => $groupo_id) {
+                                $equipa_id =  get_groupo_equipa_id($groupo_id);
                                 $arr = [
                                     'momento_id' => $moment_id[0],
                                     'groupo_id' => $groupo_id,
-                                    'equipa_id' => $equipa_id[$moment_index][$groupo_index],
+                                    'equipa_id' => $equipa_id,
                                     'user_id' => $user_id
                                 ];
                                 $wpdb->insert("$table_name", $arr);

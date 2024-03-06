@@ -220,23 +220,30 @@
     jQuery(document).ready(function ($) {
         $('#competicao_id').change(function () {
             var competicao_id = $(this).val();
+            var equipa_id = $("#equipa_nome").val();
+            if(!equipa_id){
+                alert("selecione a equipe")
+            }else{
+                // Make an AJAX call to fetch momento table data
+                $.ajax({
+                    url: ajaxurl, // WordPress AJAX endpoint
+                    type: 'POST',
+                    data: {
+                        action: 'fetch_momento_data', // Custom action name
+                        competicao_id: competicao_id,
+                        equipa_id: equipa_id
+                    },
+                    success: function (response) {
+                        // Display the fetched data in the specified container
+                        $('#momento_data').html(response);
+                    },
+                    error: function (error) {
+                        console.error('Error fetching momento data:', error);
+                    }
+                });
+            }
 
-            // Make an AJAX call to fetch momento table data
-            $.ajax({
-                url: ajaxurl, // WordPress AJAX endpoint
-                type: 'POST',
-                data: {
-                    action: 'fetch_momento_data', // Custom action name
-                    competicao_id: competicao_id
-                },
-                success: function (response) {
-                    // Display the fetched data in the specified container
-                    $('#momento_data').html(response);
-                },
-                error: function (error) {
-                    console.error('Error fetching momento data:', error);
-                }
-            });
+
         });
     });
 </script>

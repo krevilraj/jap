@@ -87,6 +87,18 @@ if (!class_exists('Jap_Route')) {
             'manage_options',
             'edit-equipa',
             'jap_edit_equipa_groupo');
+        add_submenu_page(null,
+            'Excluir equipa',
+            'Excluir equipa',
+            'manage_options',
+            'delete-equipa_competicao_list',
+            'jap_delete_equipa_competicao');
+        add_submenu_page(null,
+            'Editar equipa',
+            'Editar equipa',
+            'manage_options',
+            'edit-equipa_competicao_list',
+            'jap_edit_equipa_competicao');
 
 
 

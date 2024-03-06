@@ -212,7 +212,7 @@
                 <input type="text" placeholder="Nome da juri" name="nome" required/>
                 <input type="email" placeholder="Email" name="email" required/>
                 <input type="password" placeholder="Password" name="password" required/>
-                <label for="cars">Competição associada</label>
+                <label for="competicao_id">Competição associada</label>
                 <select name="competicao_id" id="competicao_id">
                     <option></option>
 

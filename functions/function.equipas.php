@@ -3,7 +3,32 @@
  * Get JAP Chart View
  */
 function jap_equipas_callback(){
-    view('admin.equipas.list');
+    global $wpdb;
+    $table_name = TABLE_EQUIPAS;
+    $equipa_list = $wpdb->get_results($wpdb->prepare("select * FROM $table_name ORDER BY id DESC", ""), ARRAY_A);
+    $data['equipa_list'] = $equipa_list;
+    view('admin.equipas.list', $data);
+}
+
+function jap_edit_equipa_competicao(){
+    if (!empty($_GET["equipa_id"])) {
+        $equipa_id = $_GET["equipa_id"];
+        $equipa = get_equipa_info($equipa_id);
+        if (!$equipa) {
+            jap_redirect('equipas');
+        }
+
+        $data['equipa'] = $equipa;
+        view('admin.equipas.edit', $data);
+    } else {
+        jap_redirect('equipas');
+    }
+}
+function get_equipa_info($equipa_id){
+    global $wpdb;
+    $table_name = TABLE_EQUIPAS;
+    $equipa = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %d", $equipa_id));
+    return $equipa;
 }
 
 
@@ -12,19 +37,24 @@ function jap_equipas_callback(){
  * Get JAP Chart View
  */
 function jap_equipas_add_callback(){
-    global $wpdb;
-    $table_name = TABLE_COMPETICAO;
-    $competicao_list = $wpdb->get_results($wpdb->prepare("select * FROM $table_name ORDER BY id DESC", ""), ARRAY_A);
-    $data['competicao_list'] = $competicao_list;
+
+    $data['competicao_list'] = get_competicao_list();
     $data['equipa_nome_list'] = get_all_equipas_nome();
 
     view('admin.equipas.add',$data);
 }
 
+function get_competicao_list(){
+    global $wpdb;
+    $table_name = TABLE_COMPETICAO;
+    $competicao_list = $wpdb->get_results($wpdb->prepare("select * FROM $table_name ORDER BY id DESC", ""), ARRAY_A);
+    return $competicao_list;
+}
+
 function get_all_equipas_nome(){
     global $wpdb;
     $table_name = TABLE_EQUIPAS;
-    $equipa_list = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name WHERE competicao_id IS NULL ORDER BY id DESC", ""), ARRAY_A);
+    $equipa_list = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name  ORDER BY id DESC", ""), ARRAY_A);
     return $equipa_list;
 }
 
@@ -130,6 +160,7 @@ function fetch_momento_data()
 
     // Get the competicao_id from the AJAX request
     $competicao_id = isset($_POST['competicao_id']) ? intval($_POST['competicao_id']) : 0;
+    $equipa_id = isset($_POST['equipa_id']) ? intval($_POST['equipa_id']) : 0;
 
 
     // Query the database to fetch momento table data based on competicao_id
@@ -142,9 +173,9 @@ function fetch_momento_data()
         foreach ($momento_data as $momento) { ?>
             <input type="hidden" name="moment_id[]" value="<?php echo $momento->id; ?>">
             <label for="<?php echo sanitize_title($momento->title)?>"><?php echo $momento->title; ?></label><br>
-            <select name="groupo[]" id="<?php echo sanitize_title($momento->title)?>">
+            <select name="groupo[]" id="<?php echo sanitize_title($momento->title)?>" required>
                 <option value="">Select Group</option>
-                <?php $groupo_list = get_all_groupo();
+                <?php $groupo_list = get_equipa_select_groupo($equipa_id);
                 foreach ($groupo_list as $groupo) { ?>
                     <option value="<?php echo $groupo->id; ?>"><?php echo $groupo->nome; ?></option>
                 <?php } ?>
@@ -168,6 +199,13 @@ add_action('wp_ajax_nopriv_fetch_momento_data', 'fetch_momento_data');
 
 
 
+function get_equipa_select_groupo($equipa_id)
+{
+    global $wpdb;
+    $table_name = TABLE_GROUPO;
+    $groupo_list = $wpdb->get_results($wpdb->prepare("select * FROM $table_name WHERE equipas_id =".$equipa_id, ""));
+    return $groupo_list;
+}
 function get_all_groupo()
 {
     global $wpdb;
@@ -220,3 +258,20 @@ function delete_groupo_row()
 
 // Hook the callback function to the custom AJAX action
 add_action('wp_ajax_delete_groupo_row', 'delete_groupo_row');
+
+
+function check_equipa_groupo($groupo_id,$momento_id,$equipa_id,$equipa_user_id){
+    global $wpdb;
+
+    $table_name = TABLE_EQUIPAS_MOMENTO;
+
+    $is_found = $wpdb->get_var($wpdb->prepare("SELECT id FROM $table_name WHERE equipas_id = %d AND moments_id = %d AND groupo_id = %d AND user_id = %d", $equipa_id,$momento_id,$groupo_id,$equipa_user_id));
+
+
+    if ($is_found > 0) {
+        echo 'selected="selected"';
+    }else{
+        echo "$groupo_id,$momento_id,$equipa_id,$equipa_user_id";
+    }
+
+}
