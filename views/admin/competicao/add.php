@@ -1,4 +1,10 @@
 <style>
+    #image__choosen{
+        width: 125px;
+        height: 125px;
+        margin-left: 21px;
+        display: none;
+    }
     .container__wrapper .container {
         background-color: #fff;
         padding: 30px;
@@ -158,6 +164,9 @@
     .status__box h4{
         margin-bottom:10px;
     }
+    .momento_area textarea{
+        width:100%;
+    }
 </style>
 <h1>Competição Adicionar</h1>
 
@@ -169,8 +178,12 @@
                value="<?php echo wp_create_nonce('jap_competicao_nonce'); ?>">
         <div class="container status__box">
             <div class="col-7">
-                <input type="text" placeholder="NOME DA COMPETIÇÃO" name="nome" required/>
-                <input type="file" id="image-upload"/>
+                <input type="text" placeholder="Nome da competição" name="nome" required/>
+                <div style="display: flex;flex-wrap: wrap">
+                    <input type="button" id="upload-image" class="button" value="Upload Image" >
+                    <input type="hidden" name="image" id="image-url" value=""/>
+                    <img src="" id="image__choosen" alt="choose image">
+                </div>
 
 
             </div>
@@ -203,26 +216,26 @@
                 <div class="close__btn"><img src="<?php echo JAP_URL; ?>assets/image/cancel.png" alt=""></div>
                 <div class="bullet__number">1</div>
                 <div class="momento__item_wrapper">
-                    <input type="text" name="momento_name[0][]" placeholder="NOME DO MOMENTO" required/>
+                    <input type="text" name="momento_name[0][]" placeholder="Nome do momento" required/>
                     <div class="momento_area">
                         <div class="close__btn"><img src="<?php echo JAP_URL; ?>assets/image/cancel.png" alt=""></div>
-                        <input type="text" name="observacao[0][]" placeholder="OBSERVAÇÃO" required/> <br>
-                        <input type="number" name="peso_da_nota[0][]" placeholder="PESO DA NOTA" required/><br>
-                        <input type="text" name="o_que_avaliamos[0][]" placeholder="O QUE AVALIAMOS" required/><br>
+                        <input type="text" name="observacao[0][]" placeholder="Observação" required/> <br>
+                        <input type="number" name="peso_da_nota[0][]" placeholder="Peso da nota" required/><br>
+                        <textarea name="o_que_avaliamos[0][]" placeholder="O que avaliamos" > </textarea><br>
                     </div>
 
 
                 </div>
 
 
-                <button type="button" class="add_momento">+ ADICIONAR MAIS CAMPOS DE AVALIAÇÃO</button>
+                <button type="button" class="add_momento">+ Adicionar mais campos de Avaliação</button>
 
 
             </div>
         </div>
 
 
-        <button type="button" class="add_outro_momento">+ ADICIONAR OUTRO MOMENTO</button>
+        <button type="button" class="add_outro_momento">+ Adicionar outro Momento</button>
         <div class="submit_wrapper">
             <button type="submit" name="submit" class="submit__btn button button-primary">Submit</button>
         </div>
@@ -258,7 +271,7 @@
             clonedMomentoWrapper.find("input[name^='momento_name']").attr('name', 'momento_name[' + index + '][]');
             clonedMomentoWrapper.find("input[name^='observacao']").attr('name', 'observacao[' + index + '][]');
             clonedMomentoWrapper.find("input[name^='peso_da_nota']").attr('name', 'peso_da_nota[' + index + '][]');
-            clonedMomentoWrapper.find("input[name^='o_que_avaliamos']").attr('name', 'o_que_avaliamos[' + index + '][]');
+            clonedMomentoWrapper.find("textarea[name^='o_que_avaliamos']").attr('name', 'o_que_avaliamos[' + index + '][]');
 
             containerWrapper.append(clonedMomentoWrapper);
         });
@@ -301,5 +314,39 @@
             }
         });
     });
+
 </script>
+<script>
+    jQuery(document).ready(function($){
+        var mediaUploader;
+
+        $('#upload-image').click(function(e) {
+            e.preventDefault();
+
+            // If the media uploader instance doesn't exist, create a new one
+            if (!mediaUploader) {
+                mediaUploader = wp.media({
+                    title: 'Choose Image',
+                    button: {
+                        text: 'Choose Image'
+                    },
+                    multiple: false
+                });
+
+                // When an image is selected, run a callback
+                mediaUploader.on('select', function() {
+                    var attachment = mediaUploader.state().get('selection').first().toJSON();
+                    $('#image-url').val(attachment.url);
+                    $('#image__choosen').css("display", 'block');
+                    $('#image__choosen').attr("src",attachment.url);
+                });
+            }
+
+            // Open the media uploader
+            mediaUploader.open();
+        });
+    });
+</script>
+
+
 

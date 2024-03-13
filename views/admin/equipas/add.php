@@ -167,8 +167,8 @@
     <?php require_once(JAP_PATH . 'views/admin/equipas/insert_equipas.php'); ?>
     <?php require_once(JAP_PATH . 'views/template/message_box.php'); ?>
     <form action="" method="POST" id="jap__form">
-        <input type="hidden" name="kia_request_visitantes_nonce"
-               value="<?php echo wp_create_nonce('jap_visitantes_nonce'); ?>">
+        <input type="hidden" name="jap_equipas_nonce"
+               value="<?php echo wp_create_nonce('jap_equipas_nonce'); ?>">
         <div class="container status__box">
             <div class="col-12">
 

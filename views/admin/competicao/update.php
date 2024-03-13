@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $msg = '';
             $nome = sanitize_text_field(test_input($_POST['nome']));
             $status = sanitize_text_field(test_input($_POST['status']));
-            $image = "";
+            $image = sanitize_text_field(test_input($_POST['image']));
             $arr_input = [
                 'nome' => $nome,
                 'image' => $image,

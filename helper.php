@@ -188,7 +188,7 @@ function my_get_users_name($user_id = null)
 {
 
     $user_info = $user_id ? new WP_User($user_id) : wp_get_current_user();
-
+ return $user_info->user_login;
     if ($user_info->first_name) {
 
         if ($user_info->last_name) {

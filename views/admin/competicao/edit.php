@@ -1,4 +1,10 @@
 <style>
+    #image__choosen{
+        width: 125px;
+        height: 125px;
+        margin-left: 21px;
+        display: none;
+    }
     .container__wrapper .container {
         background-color: #fff;
         padding: 30px;
@@ -165,6 +171,9 @@
     .status__box h4 {
         margin-bottom: 10px;
     }
+    .momento_area textarea{
+        width:100%;
+    }
 </style>
 <h1>Competição Adicionar</h1>
 
@@ -185,7 +194,15 @@ $competicao = $data['competicao'];
                 <input type="text" placeholder="NOME DA COMPETIÇÃO" name="nome"
                        value="<?php echo $competicao->nome ?? ''; ?>"
                        required/>
-                <input type="file" id="image-upload"/>
+                <div style="display: flex;flex-wrap: wrap">
+                    <input type="button" id="upload-image" class="button" value="Upload Image" style="height: 30px;">
+                    <input type="hidden" name="image" id="image-url" value=""/>
+                    <?php if($competicao->image): ?>
+                    <img src="<?php echo $competicao->image ?? ''; ?>" style="display: block" id="image__choosen" alt="choose image">
+                    <?php else: ?>
+                        <img src="" id="image__choosen" alt="choose image">
+                    <?php endif; ?>
+                </div>
 
             </div>
             <div class="col-2">
@@ -247,10 +264,8 @@ $competicao = $data['competicao'];
                                            value="<?php echo $observation_item->peso_da_nota ?? ''; ?>"
                                            placeholder="PESO DA NOTA"
                                            required/><br>
-                                    <input type="text" name="<?php echo "o_que_avaliamos[$index][]"; ?>"
-                                           value="<?php echo $observation_item->o_que_avaliamos ?? ''; ?>"
-                                           placeholder="O QUE AVALIAMOS"
-                                           required/><br>
+                                    <textarea name="<?php echo "o_que_avaliamos[$index][]"; ?>"placeholder="O QUE AVALIAMOS" required><?php echo $observation_item->o_que_avaliamos ?? ''; ?></textarea>
+
                                 </div>
                             <?php } ?>
 
@@ -309,7 +324,7 @@ $competicao = $data['competicao'];
             clonedMomentoWrapper.find("input[name^='momento_name']").attr('name', 'momento_name[' + index + '][]').val('');
             clonedMomentoWrapper.find("input[name^='observacao']").attr('name', 'observacao[' + index + '][]').val('');
             clonedMomentoWrapper.find("input[name^='peso_da_nota']").attr('name', 'peso_da_nota[' + index + '][]').val('');
-            clonedMomentoWrapper.find("input[name^='o_que_avaliamos']").attr('name', 'o_que_avaliamos[' + index + '][]').val('');
+            clonedMomentoWrapper.find("textarea[name^='o_que_avaliamos']").attr('name', 'o_que_avaliamos[' + index + '][]').val('');
 
             containerWrapper.append(clonedMomentoWrapper);
         });
@@ -397,3 +412,34 @@ $competicao = $data['competicao'];
     });
 </script>
 
+<script>
+    jQuery(document).ready(function($){
+        var mediaUploader;
+
+        $('#upload-image').click(function(e) {
+            e.preventDefault();
+
+            // If the media uploader instance doesn't exist, create a new one
+            if (!mediaUploader) {
+                mediaUploader = wp.media({
+                    title: 'Choose Image',
+                    button: {
+                        text: 'Choose Image'
+                    },
+                    multiple: false
+                });
+
+                // When an image is selected, run a callback
+                mediaUploader.on('select', function() {
+                    var attachment = mediaUploader.state().get('selection').first().toJSON();
+                    $('#image-url').val(attachment.url);
+                    $('#image__choosen').css("display", 'block');
+                    $('#image__choosen').attr("src",attachment.url);
+                });
+            }
+
+            // Open the media uploader
+            mediaUploader.open();
+        });
+    });
+</script>

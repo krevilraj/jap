@@ -160,15 +160,17 @@
         padding: 8px;
     }
 </style>
-<h1>Equipas Adicionar</h1>
+<h1>Atualização da equipe</h1>
 
 <?php if (isset($equipa)): ?>
     <div class="container__wrapper">
-        <?php require_once(JAP_PATH . 'views/admin/equipas/insert_equipas.php'); ?>
+        <?php require_once(JAP_PATH . 'views/admin/equipas/update.php'); ?>
         <?php require_once(JAP_PATH . 'views/template/message_box.php'); ?>
         <form action="" method="POST" id="jap__form">
-            <input type="hidden" name="kia_request_visitantes_nonce"
-                   value="<?php echo wp_create_nonce('jap_visitantes_nonce'); ?>">
+            <input type="hidden" name="jap_equipas_nonce"
+                   value="<?php echo wp_create_nonce('jap_equipas_nonce'); ?>">
+            <input type="hidden" name="equipa_id"
+                   value="<?php echo $equipa->id; ?>"">
             <div class="container status__box">
                 <div class="col-12">
 

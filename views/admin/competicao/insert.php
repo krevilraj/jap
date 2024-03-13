@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $nome = sanitize_text_field(test_input($_POST['nome']));
         $status = sanitize_text_field(test_input($_POST['status']));
-        $image = "";
+        $image = sanitize_text_field(test_input($_POST['image']));
 
 
         global $wpdb;
@@ -58,21 +58,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     reset_field();
                                     $s_message = "Obrigado!!! você estará em breve responder do admin";
                                 } else {
-                                    $e_message = "Algo deu errado.";
+                                    $e_message = "Algo deu errado.".$wpdb->last_error;
                                 }
                             }
                         } else {
-                            $e_message = "Algo deu errado.123";
+                            $e_message = "Algo deu errado".$wpdb->last_error;
 
                         }
                     }
                 }
             } else {
 
-                $e_message = "Por favor, preencha todos os campos";
+                $e_message = "Por favor, preencha todos os campos".$wpdb->last_error;
             }
         } else {
-            $e_message = "Algo deu errado.";
+            $e_message = "Algo deu errado.".$wpdb->last_error;
         }
 
 

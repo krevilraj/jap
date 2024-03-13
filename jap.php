@@ -76,7 +76,7 @@ if (!class_exists('Jap')) {
 
         function jap_css_js()
         {
-
+            wp_enqueue_media();
             wp_register_style('jap_fontawesome', "https://pro.fontawesome.com/releases/v5.10.0/css/all.css", __FILE__);
             wp_enqueue_style('jap_fontawesome');
             wp_enqueue_style( 'custom_style_css', JAP_URL . 'assets/css/style.css', array(), JAP_VERSION, 'all' );
@@ -86,6 +86,13 @@ if (!class_exists('Jap')) {
 
             wp_register_style( 'jap_datatables_css', JAP_URL . 'assets/css/datatable.css',  __FILE__,JAP_VERSION );
             wp_register_script( 'jap_datatables_js', JAP_URL . 'assets/js/datatable.js', array( 'jquery' ), JAP_VERSION, true );
+			
+			
+			 wp_register_style( 'kia__request_datatables_css', "https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css",  __FILE__,KIA_Request_VERSION );
+			wp_register_script( 'kia__request_datatables_jszip', "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js", array( 'jquery' ), KIA_Request_VERSION, true );
+		wp_register_script( 'kia__request_datatables_btn_js', "https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js", array( 'jquery' ), KIA_Request_VERSION, true );
+		wp_register_script( 'kia__request_datatables_html5js', "https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js", array( 'jquery' ), KIA_Request_VERSION, true );
+		wp_register_script( 'kia__request_datatables_printjs', "https://cdn.datatables.net/buttons/2.1.1/js/buttons.print.min.js", array( 'jquery' ), KIA_Request_VERSION, true );
 
 
 

@@ -209,7 +209,7 @@
 <?php require_once(JAP_PATH . 'views/admin/juris/update.php'); ?>
 <?php require_once(JAP_PATH . 'views/template/message_box.php'); ?>
 <div class="container__wrapper">
-    <form action="<?php echo home_url( $_SERVER['REQUEST_URI'] );
+    <form action="<?php echo home_url($_SERVER['REQUEST_URI']);
     ?>" method="POST" id="jap__form">
         <input type="hidden" name="jap_juris_nonce"
                value="<?php echo wp_create_nonce('jap_juris_nonce'); ?>">
@@ -264,31 +264,39 @@
                                 <div class="equipa_wrapper">
                                     <?php
                                     $equipa_list = get_equipas_all();
-                                    foreach ($equipa_list as $equipa_item) { ?>
-                                        <div style="display: inline-block;margin-right:15px;">
-                                            <h4><?php echo $equipa_item->nome; ?></h4>
+                                    foreach ($equipa_list as $equipa_item) {
+                                        if (check_moment_group($equipa_item->id, $momento->id)) {
+                                            ?>
+                                            <div style="display: inline-block;margin-right:15px;">
+                                                <h4><?php echo $equipa_item->nome; ?></h4>
+
+                                                <?php
+                                                $groupo_list = get_equipa_groupo($equipa_item->id);
+                                                foreach ($groupo_list as $index => $groupo_item) {
+                                                    if (check_group_moment($groupo_item->id, $momento->id)) {
+                                                        ?>
+                                                        <input type="hidden"
+                                                               name="equipa_id[<?php echo $momento_index; ?>][]"
+                                                               value="<?php echo $equipa_item->id; ?>">
+                                                        <input type="checkbox"
+                                                               class="groupo_equipa"
+                                                               data-equipa_id="<?php echo $equipa_item->id; ?>"
+                                                               data-groupo_id="<?php echo $groupo_item->id; ?>"
+                                                               data-moment_id="<?php echo $momento->id; ?>"
+                                                               data-juri_id="<?php echo $juri->ID; ?>"
+                                                               id="<?php echo sanitize_title($groupo_item->nome) . $index . $momento_index ?>"
+                                                               name="groupo[<?php echo $momento_index; ?>][]"
+                                                            <?php echo get_groupo_equipa_checkbox($equipa_item->id, $groupo_item->id, $momento->id, $juri->ID); ?>
+                                                               value="<?php echo $groupo_item->id; ?>">
+                                                        <label for="<?php echo sanitize_title($groupo_item->nome) . $index . $momento_index ?>"><?php echo $groupo_item->nome; ?></label>
+                                                        <br>
+                                                    <?php }
+                                                } ?>
+                                            </div>
 
                                             <?php
-                                            $groupo_list = get_equipa_groupo($equipa_item->id);
-                                            foreach ($groupo_list as $index => $groupo_item) { ?>
-                                                <input type="hidden" name="equipa_id[<?php echo $momento_index; ?>][]"
-                                                       value="<?php echo $equipa_item->id; ?>">
-                                                <input type="checkbox"
-                                                       class="groupo_equipa"
-                                                       data-equipa_id="<?php echo $equipa_item->id; ?>"
-                                                       data-groupo_id="<?php echo $groupo_item->id; ?>"
-                                                       data-moment_id="<?php echo $momento->id; ?>"
-                                                       data-juri_id="<?php echo $juri->ID; ?>"
-                                                       id="<?php echo sanitize_title($groupo_item->nome) . $index . $momento_index ?>"
-                                                       name="groupo[<?php echo $momento_index; ?>][]"
-                                                    <?php echo get_groupo_equipa_checkbox($equipa_item->id, $groupo_item->id, $momento->id, $juri->ID); ?>
-                                                       value="<?php echo $groupo_item->id; ?>">
-                                                <label for="<?php echo sanitize_title($groupo_item->nome) . $index . $momento_index ?>"><?php echo $groupo_item->nome; ?></label>
-                                                <br>
-                                            <?php } ?>
-                                        </div>
-
-                                    <?php }
+                                        }
+                                    }
                                     ?>
                                 </div>
                             </div>

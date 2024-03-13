@@ -4,8 +4,8 @@ $error = [];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_POST['submit'])) {
-        if (isset($_POST['jap_competicao_nonce'])) {
-            if (!wp_verify_nonce($_POST['jap_competicao_nonce'], 'jap_competicao_nonce')) {
+        if (isset($_POST['jap_equipas_nonce'])) {
+            if (!wp_verify_nonce($_POST['jap_equipas_nonce'], 'jap_equipas_nonce')) {
                 return;
             }
         }
@@ -24,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if(isset($_POST['moment_id'])){
             foreach ($_POST['moment_id'] as $index => $item){
                 global $wpdb;
-                $user_id = get_current_user_id();
                 $table_name = TABLE_EQUIPAS_MOMENTO;
                 $user_id = get_current_user_id();
                 $wpdb->insert("$table_name", [
@@ -36,12 +35,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $competicao_id = $wpdb->insert_id;
 
                 if ($competicao_id > 0) {
-                    $s_message = "Inserted successfully!!!";
+                    $s_message = "Inserido com sucesso!!!";
 
                 } else {
                     // Error message
                     $wpdb_last_error = $wpdb->last_error;
-                    echo "Error inserting data for moment_id: $item. Error message: $wpdb_last_error<br>";
+                    echo "Erro ao inserir dados para moment_id: Error message: $wpdb_last_error<br>";
                 }
             }
         }

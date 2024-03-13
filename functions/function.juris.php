@@ -24,7 +24,6 @@ function jap_juris_callback()
 }
 
 
-
 /**
  * Get JAP Chart View
  */
@@ -70,24 +69,31 @@ function fetch_juris_momento_data()
                 <div class="equipa_wrapper">
                     <?php
                     $equipa_list = get_equipas_all();
-                    foreach ($equipa_list as $equipa_item) { ?>
-                        <div style="display: inline-block;margin-right:15px;">
-                            <h4><?php echo $equipa_item->nome; ?></h4>
+                    foreach ($equipa_list as $equipa_item) {
+                        if (check_moment_group($equipa_item->id, $momento->id)) {
+                            ?>
+                            <div style="display: inline-block;margin-right:15px;">
+                                <h4><?php echo $equipa_item->nome; ?></h4>
+
+                                <?php
+                                $groupo_list = get_equipa_groupo($equipa_item->id);
+                                foreach ($groupo_list as $index => $groupo_item) {
+                                    if (check_group_moment($groupo_item->id,$momento->id)) {
+                                        ?>
+
+                                        <input type="checkbox"
+                                               id="<?php echo sanitize_title($groupo_item->nome) . $index . $momento_index ?>"
+                                               name="groupo[<?php echo $momento_index; ?>][]"
+                                               value="<?php echo $groupo_item->id; ?>">
+                                        <label for="<?php echo sanitize_title($groupo_item->nome) . $index . $momento_index ?>"><?php echo $groupo_item->nome; ?></label>
+                                        <br>
+                                    <?php }
+                                } ?>
+                            </div>
 
                             <?php
-                            $groupo_list = get_equipa_groupo($equipa_item->id);
-                            foreach ($groupo_list as $index => $groupo_item) { ?>
-
-                                <input type="checkbox"
-                                       id="<?php echo sanitize_title($groupo_item->nome) . $index . $momento_index ?>"
-                                       name="groupo[<?php echo $momento_index; ?>][]"
-                                       value="<?php echo $groupo_item->id; ?>">
-                                <label for="<?php echo sanitize_title($groupo_item->nome) . $index . $momento_index ?>"><?php echo $groupo_item->nome; ?></label>
-                                <br>
-                            <?php } ?>
-                        </div>
-
-                    <?php }
+                        }
+                    }
                     ?>
                 </div>
             </div>
@@ -251,4 +257,27 @@ function get_groupo_equipa_id($groupo_id)
     $table_name = TABLE_GROUPO;
     $user = $wpdb->get_var($wpdb->prepare("SELECT equipas_id FROM $table_name WHERE id = %d", $groupo_id));
     return $user;
+}
+
+function check_moment_group($equipa_item_id, $momento_id)
+{
+    $table_name = TABLE_EQUIPAS_MOMENTO;
+    global $wpdb;
+    $moment_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE equipas_id = %d AND moments_id = %d  ", $equipa_item_id, $momento_id));
+
+    if ($moment_exists)
+        return true;
+    else
+        false;
+}
+function check_group_moment($groupo_item_id,$momento_id)
+{
+    $table_name = TABLE_EQUIPAS_MOMENTO;
+    global $wpdb;
+    $group_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE groupo_id = %d AND moments_id = %d  ", $groupo_item_id, $momento_id));
+
+    if ($group_exists)
+        return true;
+    else
+        false;
 }

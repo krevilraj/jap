@@ -115,6 +115,7 @@ if (empty($mvt_db_version)) {
     $table_name = TABLE_JURIS_EQUIPAS_RANK;
     $users_table_name = TABLE_USERS; // Replace with the actual user table name
     $momento_table_name = TABLE_MOMENTO; // Replace with the actual table name
+    $momento_meta_table_name = TABLE_MOMENTO_META; // Replace with the actual table name
     $equipas_table_name = TABLE_EQUIPAS; // Replace with the actual table name
 
 // Define the collation
@@ -124,11 +125,13 @@ if (empty($mvt_db_version)) {
 CREATE TABLE $table_name (
     id bigint(11) NOT NULL AUTO_INCREMENT,
     momento_id bigint(11) NOT NULL,
+    momento_meta_id bigint(11) NOT NULL,
     equipa_id bigint(11) NOT NULL,
     equipa_rank int NOT NULL,
     user_id bigint(11) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (momento_id) REFERENCES $momento_table_name(id) ON DELETE CASCADE,
+    FOREIGN KEY (momento_meta_id) REFERENCES $momento_meta_table_name(id) ON DELETE CASCADE,
     FOREIGN KEY (equipa_id) REFERENCES $equipas_table_name(id) ON DELETE CASCADE
 ) $charset_collate;";
 

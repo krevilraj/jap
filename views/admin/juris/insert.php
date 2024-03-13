@@ -58,6 +58,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             }
+			
+			
+			if (trim($email) != '') {
+                    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        $sender_name = 'Jap';
+                        $subject = "Sua nova conta foi criada no JAP como juri";
+                        $to = $email;
+//                         add_filter('wp_mail_content_type', 'wpdocs_set_html_mail_content_type');
+                        $headers = array(
+                            'Content-Type: text/html; charset=UTF-8',
+                            'From: ' . $sender_name . ' <info@japortugal.org>',
+                            'Reply-To: info@japortugal.org' 
+                        );
+
+
+                        $email_message = '
+    <img src="'.home_url().'/wp-content/uploads/2024/03/logo-jap.png" height="25px"/>
+    <p style="margin-bottom: 5px;margin-top:10px;">Sua nova conta foi criada</p>
+ <p style="margin-bottom: 5px">User Login: '.$email.' </p>
+ <p style="margin-bottom: 5px">User Password: '.$password.'</p>
+ <p style="margin-bottom: 5px"><a href="'.home_url().'">Click here to login</a></p>
+';
+
+
+
+// Send email
+                        $sent = wp_mail($to, $subject, $email_message, $headers);
+
+// Remove content type filter
+//                         remove_filter('wp_mail_content_type', 'wpdocs_set_html_mail_content_type');
+
+                    }
+
+                }
         }
     }
 }

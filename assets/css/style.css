@@ -1,0 +1,93 @@
+.jap_admin_list{
+	       background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+    margin-top: 30px;
+}
+.jap_admin_list h1,  h1{
+	    font-weight: 400;
+	margin-bottom: 30px;
+	    color: #286075;
+
+}
+.jap_admin_list .request-list {
+	padding-top:20px;
+	border:none;
+}
+.jap_admin_list .dataTables_filter input {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 2px 3px !important;
+    background-color: transparent;
+    margin-left: 3px;
+}
+.jap_admin_list .dataTables_wrapper .dataTables_length select{
+	    padding: 0 15px;
+}
+.jap_admin_list .request-list a{
+	text-decoration:none;
+}
+.jap_admin_list .request-list .jap__delete__admin button{
+	     background: red;
+    color: #fff;
+    border: none;
+    padding: 5px 10px ;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.message__box .success-message{
+	background: #0ca00c;
+    color: #fff;
+    padding: 10px;
+    margin: 20px 0;
+}
+.message__box .error-message{
+	background: red;
+    color: #fff;
+    padding: 10px;
+    margin: 20px 0;
+}
+.container__wrapper button {
+
+    background-color: #009fae !important;;
+}
+.equipa_item h4{
+	    border-top: 2px solid #000;
+    padding-top: 10px;
+}
+.equipas_page_add-equipas .status__box label{
+	    font-weight: 500;
+}
+.equipas_page_add-equipas .status__box select {
+    width: 100%;
+    max-width: 100%;
+    padding: 5px 17px;
+    margin-top: 5px;
+}
+
+.equipa_item {
+  	width:unset !important;
+	min-width:420px;
+    margin-right: 60px !important;
+}
+
+.equipa_item h2:after {
+      width: 100% !important;
+    max-width: 420px !important;
+}
+ input{
+	    padding: 6px 15px !important
+}
+#jap__form label{
+	font-weight:500;
+}
+
+#jap__form select{
+	margin-top:5px;
+}
+.jap_admin_list .submit__btn{
+	    margin-top: 20px;
+}

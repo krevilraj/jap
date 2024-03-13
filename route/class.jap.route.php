@@ -156,8 +156,8 @@ if (!class_exists('Jap_Route')) {
             'jap_avaliacoes_callback');
 
         add_submenu_page('avaliacoes',
-            'Adicionar avaliacoes',
-            'Adicionar avaliacoes',
+            'Avaliações por momentos',
+            'Avaliações por momentos',
             'manage_options',
             'add-avaliacoes',
             'jap_avaliacoes_add_callback');

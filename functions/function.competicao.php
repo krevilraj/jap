@@ -172,5 +172,14 @@ function delete_momento_row()
 // Hook the callback function to the custom AJAX action
 add_action('wp_ajax_delete_momento_row', 'delete_momento_row');
 
+// **********************************for frontend ***************************************
+function get_all_competicao($competicao_id)
+{
+    global $wpdb;
+    $table_name = TABLE_MOMENTO;
+    $competicao_list = $wpdb->get_results($wpdb->prepare("select * FROM $table_name WHERE competicao_id = $competicao_id ORDER BY id ASC", ""));
+    return $competicao_list;
+}
+
 
 

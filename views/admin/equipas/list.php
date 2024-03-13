@@ -16,6 +16,7 @@ if (isset($equipa_list) && count($equipa_list) > 0): ?>
                     <th><?php esc_html_e('ID', 'jap'); ?></th>
                     <th><?php esc_html_e('Equipa', 'jap'); ?></th>
                     <th><?php esc_html_e('Competição associada', 'jap'); ?></th>
+					<th><?php esc_html_e('Associação de momentos', 'jap'); ?></th>
                     <?php if (is_admin()): ?>
                         <th>Action</th>
                     <?php endif; ?>
@@ -27,8 +28,8 @@ if (isset($equipa_list) && count($equipa_list) > 0): ?>
                     <tr>
                         <td><?php echo $data['id']; ?></td>
                         <td><?php echo $data['nome']; ?></td>
-                        <td><?php echo get_juri_competicao($data['id']); ?></td>
-
+                        <td><?php echo get_equipa_competicao($data['competicao_id']); ?></td>
+						<td><?php echo get_equipa_momentos($data['id']); ?></td>
 
                         <?php if (is_admin()): ?>
                             <td>
